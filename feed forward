@@ -1,0 +1,33 @@
+from sklearn.datasets import load_iris
+iris=load_iris()
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(iris.data,iris.target,test_size=0.2,random_state=1)
+## hidden_layer_sizes: tuple, length = n_layers - 2, default=(100,)
+#The ith element represents the number of neurons in the ith hidden layer. (6,) means one hidden layer with 6 neurons
+
+#solver:
+#The weight optimization can be influenced with the solver parameter. Three solver modes are available
+
+#    'lbfgs'
+#    is an optimizer in the family of quasi-Newton methods.
+#   'sgd'
+#   refers to stochastic gradient descent.
+#   'adam' refers to a stochastic gradient-based optimizer proposed by Kingma, Diederik, and Jimmy Ba
+
+#Without understanding in the details of the solvers, you should know the following: 'adam' works pretty well - both training time and validation score - on relatively large datasets, i.e. thousands of training samples or more. For small datasets, however, 'lbfgs' can converge faster and perform better.
+
+#'alpha'
+#This parameter can be used to control possible 'overfitting' and 'underfitting'. 
+from sklearn.neural_network import MLPClassifier
+
+clf = MLPClassifier(solver='lbfgs', 
+                    alpha=1e-5,
+                    hidden_layer_sizes=(6,), 
+                    random_state=1)
+
+clf.fit(x_train,y_train)     
+clf.score(x_train,y_train)  
+y_pred=clf.predict(x_test)
+print(y_pred)
+from sklearn.metrics import accuracy_score
+print("accuracy score:",accuracy_score(y_test,y_pred))
